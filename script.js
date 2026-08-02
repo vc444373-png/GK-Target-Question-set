@@ -2,28 +2,36 @@ let timeInSeconds = 18 * 60; // 18 मिनट
 let timerInterval = null;
 let isSubmitted = false;
 
-// 'Start Test' बटन दबाते ही यह फ़ंक्शन चलेगा
 function startQuiz() {
-    document.getElementById('start-screen').classList.add('hidden');
-    document.getElementById('quiz-section').classList.remove('hidden');
-    
-    renderQuestions();
-    startTimer();
+    try {
+        const startScreen = document.getElementById('start-screen');
+        const quizSection = document.getElementById('quiz-section');
+        
+        if (startScreen) startScreen.classList.add('hidden');
+        if (quizSection) quizSection.classList.remove('hidden');
+
+        renderQuestions();
+        startTimer();
+    } catch (err) {
+        alert("क्विज़ शुरू करने में त्रुटि: " + err.message);
+    }
 }
 
 function renderQuestions() {
     const quizContainer = document.getElementById('quiz-container');
+    if (!quizContainer) return;
+    
     quizContainer.innerHTML = '';
 
-    if (typeof questions === 'undefined' || questions.length === 0) {
-        quizContainer.innerHTML = '<p style="color:red; text-align:center;">प्रश्न लोड नहीं हो पाए! कृपया questions.js चेक करें।</p>';
+    if (typeof questions === 'undefined' || !questions || questions.length === 0) {
+        quizContainer.innerHTML = '<p style="color:red; text-align:center; padding:20px;">प्रश्न लोड नहीं हो सके! कृपया questions.js चेक करें।</p>';
         return;
     }
 
     questions.forEach((q, index) => {
         const card = document.createElement('div');
         card.className = 'question-card';
-        card.id = question-${index};
+        card.id = `question-${index}`;
 
         let optionsHTML = '';
         q.options.forEach((opt, optIndex) => {
@@ -50,6 +58,8 @@ function renderQuestions() {
 function startTimer() {
     const timeDisplay = document.getElementById('time-display');
 
+    if (timerInterval) clearInterval(timerInterval);
+
     timerInterval = setInterval(() => {
         if (timeInSeconds <= 0) {
             clearInterval(timerInterval);
@@ -62,8 +72,10 @@ function startTimer() {
         const minutes = Math.floor(timeInSeconds / 60);
         const seconds = timeInSeconds % 60;
 
-        timeDisplay.textContent = 
-            ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')};
+        if (timeDisplay) {
+            timeDisplay.textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
     }, 1000);
 }
 
@@ -74,24 +86,26 @@ function submitQuiz() {
     isSubmitted = true;
 
     const submitBtn = document.getElementById('submit-btn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = "सबमिट हो गया";
-    submitBtn.style.backgroundColor = "#757575";
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "सबमिट हो गया";
+        submitBtn.style.backgroundColor = "#757575";
+    }
 
     let correctCount = 0;
     let wrongCount = 0;
     let skippedCount = 0;
 
     questions.forEach((q, index) => {
-        const selectedInput = document.querySelector(input[name="q${index}"]:checked);
-        const expBox = document.getElementById(exp-${index});
+        const selectedInput = document.querySelector(`input[name="q${index}"]:checked`);
+        const expBox = document.getElementById(`exp-${index}`);
         
-        const allInputs = document.querySelectorAll(input[name="q${index}"]);
+        const allInputs = document.querySelectorAll(`input[name="q${index}"]`);
         allInputs.forEach(i => i.disabled = true);
 
         if (expBox) expBox.classList.remove('hidden');
 
-        const correctLabel = document.getElementById(label-${index}-${q.answer});
+        const correctLabel = document.getElementById(`label-${index}-${q.answer}`);
         if (correctLabel) correctLabel.classList.add('correct-option');
 
         if (selectedInput) {
@@ -100,7 +114,7 @@ function submitQuiz() {
                 correctCount++;
             } else {
                 wrongCount++;
-                const wrongLabel = document.getElementById(label-${index}-${userAns});
+                const wrongLabel = document.getElementById(`label-${index}-${userAns}`);
                 if (wrongLabel) wrongLabel.classList.add('wrong-option');
             }
         } else {
@@ -116,7 +130,7 @@ function submitQuiz() {
     document.getElementById('max-score').textContent = questions.length;
 
     const resultBox = document.getElementById('result-box');
-    resultBox.classList.remove('hidden');
+    if (resultBox) resultBox.classList.remove('hidden');
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }

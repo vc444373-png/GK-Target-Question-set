@@ -1,33 +1,63 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SSC Mock Test 01</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSC MOCK TEST - 01</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="container">
+    <!-- 1. Start Test Screen (लिंक खोलते ही पहले यह दिखेगा) -->
+    <div id="start-screen" class="start-box">
+        <h2>SSC MOCK TEST - 01</h2>
+        <div class="test-info">
+            <p>📋 <strong>कुल प्रश्न:</strong> 53</p>
+            <p>⏱️ <strong>कुल समय:</strong> 18 मिनट</p>
+            <p>🎯 <strong>विषय:</strong> सामान्य अध्ययन (GS/GK)</p>
+        </div>
+        <div class="instructions">
+            <h4>महत्वपूर्ण निर्देश:</h4>
+            <ul>
+                <li>नीचे <strong>'Start Test'</strong> बटन पर क्लिक करते ही 18 मिनट का टाइमर शुरू हो जाएगा।</li>
+                <li>समय पूरा होने पर टेस्ट स्वतः सबमिट हो जाएगा।</li>
+            </ul>
+        </div>
+        <button id="start-btn" onclick="startQuiz()">Start Test 🚀</button>
+    </div>
 
-<h1>SSC MOCK TEST - 01</h1>
+    <!-- 2. Main Test Section (Start करने पर दिखेगा) -->
+    <div id="quiz-section" class="hidden">
+        <header class="quiz-header">
+            <div class="header-content">
+                <h3>SSC MOCK TEST - 01</h3>
+                <div class="timer-box">
+                    समय शेष: <span id="time-display">18:00</span>
+                </div>
+                <button id="submit-btn" onclick="submitQuiz()">Submit Test</button>
+            </div>
+        </header>
 
-<div class="info">
-<p>Total Questions : <b>54</b></p>
-<p>Time Left : <span id="timer">18:00</span></p>
-</div>
+        <main class="container">
+            <!-- Scoreboard (Submit के बाद दिखेगा) -->
+            <div id="result-box" class="result-box hidden">
+                <h3>आपका टेस्ट रिजल्ट</h3>
+                <div class="score-details">
+                    <p>कुल प्रश्न: <span id="total-q">0</span></p>
+                    <p class="correct">सही: <span id="correct-q">0</span></p>
+                    <p class="wrong">गलत: <span id="wrong-q">0</span></p>
+                    <p class="skipped">छोड़े गए: <span id="skipped-q">0</span></p>
+                    <p class="score">स्कोर: <span id="final-score">0</span> / <span id="max-score">0</span></p>
+                </div>
+                <p class="notice-text">नीचे सभी प्रश्नों के सही उत्तर एवं व्याख्या (Explanations) देखें 👇</p>
+            </div>
 
-<div id="quiz"></div>
+            <!-- Questions Container -->
+            <div id="quiz-container"></div>
+        </main>
+    </div>
 
-<button id="submitBtn">Submit Test</button>
-
-<div id="result"></div>
-
-</div>
-
-<script src="questions.js"></script>
-<script src="script.js"></script>
-
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
